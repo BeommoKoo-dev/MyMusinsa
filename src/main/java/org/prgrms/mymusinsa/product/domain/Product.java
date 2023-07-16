@@ -1,7 +1,8 @@
 package org.prgrms.mymusinsa.product.domain;
 
 import lombok.Getter;
-import lombok.Setter;
+import org.prgrms.mymusinsa.product.dto.ProductCreateRequestDTO;
+import org.prgrms.mymusinsa.product.dto.ProductUpdateRequestDTO;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -17,6 +18,30 @@ public class Product {
     private final LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
+    public static Product of(ProductCreateRequestDTO productRequestDTO) {
+        return new Product(
+            UUID.randomUUID(),
+            productRequestDTO.productName(),
+            productRequestDTO.category(),
+            productRequestDTO.price(),
+            productRequestDTO.description(),
+            LocalDateTime.now(),
+            LocalDateTime.now()
+        );
+    }
+
+    public static Product of(UUID productId, ProductUpdateRequestDTO productUpdateRequestDTO) {
+        return new Product(
+            productId,
+            productUpdateRequestDTO.productName(),
+            productUpdateRequestDTO.category(),
+            productUpdateRequestDTO.price(),
+            productUpdateRequestDTO.description(),
+            LocalDateTime.now(),
+            LocalDateTime.now()
+        );
+    }
+
     public Product(UUID productId, String productName, Category category, long price, String description,
                    LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.productId = productId;
@@ -26,26 +51,6 @@ public class Product {
         this.description = description;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
-    }
-
-    public void setProductName(String productName) {
-        this.productName = productName;
-        this.updatedAt = LocalDateTime.now();
-    }
-
-    public void setCategory(Category category) {
-        this.category = category;
-        this.updatedAt = LocalDateTime.now();
-    }
-
-    public void setPrice(long price) {
-        this.price = price;
-        this.updatedAt = LocalDateTime.now();
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-        this.updatedAt = LocalDateTime.now();
     }
 
 }
