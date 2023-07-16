@@ -44,14 +44,12 @@ public class ProductJdbcRepository implements ProductRepository{
     };
 
     public Product insert(Product product) {
-        jdbcTemplate.update(INSERT_PRODUCT_SQL,
-            toMapSqlParams(product));
+        jdbcTemplate.update(INSERT_PRODUCT_SQL, toMapSqlParams(product));
         return product;
     }
 
     public Product update(Product product) {
-        jdbcTemplate.update(UPDATE_PRODUCT_SQL,
-            toMapSqlParams(product));
+        jdbcTemplate.update(UPDATE_PRODUCT_SQL, toMapSqlParams(product));
         return product;
     }
 
