@@ -43,8 +43,9 @@ public class ProductRestController {
     }
 
     @PutMapping("/{productId}")
-    public ResponseEntity<ProductResponseDTO> updateProduct(@PathVariable("productId") UUID productId, @RequestBody ProductUpdateRequestDTO productUpdateRequestDTO) {
-        return ResponseEntity.ok(productService.updateProduct(productId, productUpdateRequestDTO));
+    public ResponseEntity updateProduct(@PathVariable("productId") UUID productId, @RequestBody ProductUpdateRequestDTO productUpdateRequestDTO) {
+        productService.updateProduct(productId, productUpdateRequestDTO);
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 
     @DeleteMapping("/{productId}")

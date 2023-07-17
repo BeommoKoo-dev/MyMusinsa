@@ -22,7 +22,7 @@ public class ProductJdbcRepository implements ProductRepository{
         "price, description, created_at, updated_at)"
         + "VALUES(UUID_TO_BIN(:productId), :productName, :category, :price, :description, :createdAt, :updatedAt)";
     private static final String UPDATE_PRODUCT_SQL = "UPDATE products SET product_name = :productName,"
-        + "category = :category, price = :price, description = :description, updated_at = :updatedAt"
+        + "price = :price, description = :description, updated_at = :updatedAt"
         + " WHERE product_id = UUID_TO_BIN(:productId)";
     private static final String SELECT_ALL_SQL = "SELECT * FROM products";
     private static final String FIND_BY_ID_SQL = "SELECT * FROM products WHERE product_id = UUID_TO_BIN(:productId)";
@@ -48,14 +48,14 @@ public class ProductJdbcRepository implements ProductRepository{
         return product;
     }
 
-    public Product update(Product product) {
-        jdbcTemplate.update(UPDATE_PRODUCT_SQL, toMapSqlParams(product));
-        return product;
+    public int updateById(UUID productId, Product product) {
+        int update = jdbcTemplate.update(UPDATE_PRODUCT_SQL,
+            toMapSqlParams(productId, product));
+        return update;
     }
 
     public void deleteById(UUID productId) {
-        jdbcTemplate.update(DELETE_BY_ID_SQL,
-            Collections.singletonMap("productId", productId.toString()));
+        jdbcTemplate.update(DELETE_BY_ID_SQL, Collections.singletonMap("productId", productId.toString()));
     }
 
     public List<Product> findAll() {
@@ -84,6 +84,13 @@ public class ProductJdbcRepository implements ProductRepository{
             .addValue("updatedAt", product.getUpdatedAt());
     }
 
+    private MapSqlParameterSource toMapSqlParams(UUID productId, Product product) {
+        return new MapSqlParameterSource().addValue("productId", productId.toString())
+            .addValue("productName", product.getProductName())
+            .addValue("price", product.getPrice())
+            .addValue("description", product.getDescription())
+            .addValue("updatedAt", product.getUpdatedAt());
+    }
     private UUID toUUID(byte[] bytes) {
         ByteBuffer byteBuffer = ByteBuffer.wrap(bytes);
         return new UUID(byteBuffer.getLong(), byteBuffer.getLong());

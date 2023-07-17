@@ -15,15 +15,5 @@ public record ProductResponseDTO(
     LocalDateTime createdAt,
     LocalDateTime updatedAt
 ) {
-    public static ProductResponseDTO of(Product product) {
-        return new ProductResponseDTO(
-            product.getProductId(),
-            product.getProductName(),
-            product.getCategory(),
-            product.getPrice(),
-            product.getDescription(),
-            product.getCreatedAt(),
-            product.getUpdatedAt()
-        );
-    }
+
 }

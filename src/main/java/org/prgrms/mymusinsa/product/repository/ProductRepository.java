@@ -10,7 +10,7 @@ public interface ProductRepository {
 
     Product insert(Product product);
 
-    Product update(Product product);
+    int updateById(UUID productId, Product product);
 
     void deleteById(UUID productId);
 

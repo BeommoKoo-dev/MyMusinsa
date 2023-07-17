@@ -20,27 +20,27 @@ public class ProductService {
     private final ProductRepository productRepository;
 
     public ProductResponseDTO getProductById(UUID productId) {
-        return ProductResponseDTO.of(productRepository.findProductById(productId));
+        return productRepository.findProductById(productId).toResponseDTO();
     }
 
     public List<ProductResponseDTO> getAllProduct() {
         return productRepository.findAll()
             .stream()
-            .map(ProductResponseDTO::of)
+            .map(Product::toResponseDTO)
             .toList();
     }
 
     @Transactional
     public ProductResponseDTO createProduct(ProductCreateRequestDTO productRequestDTO) {
-        Product product = Product.of(productRequestDTO);
+        Product product = productRequestDTO.toProduct();
         productRepository.insert(product);
-        return ProductResponseDTO.of(product);
+        return product.toResponseDTO();
     }
 
     @Transactional
-    public ProductResponseDTO updateProduct(UUID productId, ProductUpdateRequestDTO productUpdateRequestDTO) {
-        Product product = productRepository.update(Product.of(productId, productUpdateRequestDTO));
-        return ProductResponseDTO.of(product);
+    public int updateProduct(UUID productId, ProductUpdateRequestDTO productUpdateRequestDTO) {
+        Product product = productUpdateRequestDTO.toProduct();
+        return productRepository.updateById(productId, product);
     }
 
     @Transactional
@@ -51,7 +51,7 @@ public class ProductService {
     public List<ProductResponseDTO> getProductByCategory(Category category) {
         return productRepository.findProductByCategory(category)
             .stream()
-            .map(product -> ProductResponseDTO.of(product))
+            .map(Product::toResponseDTO)
             .toList();
     }
 

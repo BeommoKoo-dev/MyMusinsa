@@ -1,7 +1,9 @@
 package org.prgrms.mymusinsa.product.domain;
 
 import lombok.Getter;
+import org.prgrms.mymusinsa.order.dto.OrderResponseDTO;
 import org.prgrms.mymusinsa.product.dto.ProductCreateRequestDTO;
+import org.prgrms.mymusinsa.product.dto.ProductResponseDTO;
 import org.prgrms.mymusinsa.product.dto.ProductUpdateRequestDTO;
 
 import java.time.LocalDateTime;
@@ -18,30 +20,6 @@ public class Product {
     private final LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    public static Product of(ProductCreateRequestDTO productRequestDTO) {
-        return new Product(
-            UUID.randomUUID(),
-            productRequestDTO.productName(),
-            productRequestDTO.category(),
-            productRequestDTO.price(),
-            productRequestDTO.description(),
-            LocalDateTime.now(),
-            LocalDateTime.now()
-        );
-    }
-
-    public static Product of(UUID productId, ProductUpdateRequestDTO productUpdateRequestDTO) {
-        return new Product(
-            productId,
-            productUpdateRequestDTO.productName(),
-            productUpdateRequestDTO.category(),
-            productUpdateRequestDTO.price(),
-            productUpdateRequestDTO.description(),
-            LocalDateTime.now(),
-            LocalDateTime.now()
-        );
-    }
-
     public Product(UUID productId, String productName, Category category, long price, String description,
                    LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.productId = productId;
@@ -53,4 +31,15 @@ public class Product {
         this.updatedAt = updatedAt;
     }
 
+    public ProductResponseDTO toResponseDTO() {
+        return new ProductResponseDTO(
+            productId,
+            productName,
+            category,
+            price,
+            description,
+            createdAt,
+            updatedAt
+        );
+    }
 }
