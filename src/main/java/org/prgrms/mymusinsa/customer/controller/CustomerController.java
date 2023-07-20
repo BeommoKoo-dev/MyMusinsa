@@ -37,7 +37,7 @@ public class CustomerController {
     @PostMapping("/signup")
     public String signUp(@Valid CustomerCreateRequestDTO customerCreateRequestDTO){
         customerService.createCustomer(customerCreateRequestDTO);
-        return "redirect:/products";
+        return "redirect:/customers/login";
     }
 
 }
