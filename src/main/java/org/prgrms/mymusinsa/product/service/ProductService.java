@@ -55,4 +55,11 @@ public class ProductService {
             .toList();
     }
 
+    public List<ProductResponseDTO> getProductByRanking(int topRanking) {
+        return productRepository.findProductByRanking(topRanking)
+            .stream()
+            .map(Product::toResponseDTO)
+            .toList();
+    }
+
 }

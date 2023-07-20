@@ -8,7 +8,7 @@ import java.util.UUID;
 
 public record ProductUpdateRequestDTO(
     String productName,
-    Category category,
+    String category,
     long price,
     String description
 ) {
@@ -17,7 +17,7 @@ public record ProductUpdateRequestDTO(
         return new Product(
             null,
             productName,
-            null,
+            Category.valueOf(category),
             price,
             description,
             null,

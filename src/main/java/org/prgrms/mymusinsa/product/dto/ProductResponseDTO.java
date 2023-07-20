@@ -10,6 +10,7 @@ public record ProductResponseDTO(
     String productName,
     Category category,
     long price,
+    long salesCount,
     String description,
     LocalDateTime createdAt,
     LocalDateTime updatedAt

@@ -24,6 +24,7 @@ public class JdbcOrderRepository implements OrderRepository{
         "VALUES(UUID_TO_BIN(:orderId), UUID_TO_BIN(:customerId), :address, :postcode, :orderStatus, :createdAt, :updatedAt)";
     private static final String INSERT_ORDER_ITEMS_SQL = "INSERT INTO order_items(order_id, product_id, quantity)" +
         "VALUES(UUID_TO_BIN(:orderId), UUID_TO_BIN(:productId), :quantity)";
+    private static final String INCREMENT_SALES_COUNT_SQL = "UPDATE products SET sales_count = sales_count + (:quantity) WHERE product_id = UUID_TO_BIN(:productId)";
     private static final String UPDATE_ORDER_SQL = "UPDATE orders " +
         "SET address = :address, postcode = :postcode, order_status = :orderStatus, updated_at = :updatedAt " +
         "WHERE order_id = UUID_TO_BIN(:orderId)";
@@ -57,8 +58,11 @@ public class JdbcOrderRepository implements OrderRepository{
     @Override
     public Order insert(Order order) {
         jdbcTemplate.update(INSERT_ORDER_SQL, toMapSqlParams(order));
-        order.getOrderItems().forEach(orderItem ->
-            jdbcTemplate.update(INSERT_ORDER_ITEMS_SQL, toMapSqlParmas(order.getOrderId(), orderItem)));
+        order.getOrderItems().forEach(orderItem -> {
+                jdbcTemplate.update(INSERT_ORDER_ITEMS_SQL, toMapSqlParmas(order.getOrderId(), orderItem));
+                jdbcTemplate.update(INCREMENT_SALES_COUNT_SQL, toMapSqlParmas(order.getOrderId(), orderItem));
+            }
+        );
         return order;
     }
 

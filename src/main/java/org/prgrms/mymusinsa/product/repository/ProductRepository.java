@@ -20,4 +20,6 @@ public interface ProductRepository {
 
     List<Product> findProductByCategory(Category category);
 
+    List<Product> findProductByRanking(int topRanking);
+
 }

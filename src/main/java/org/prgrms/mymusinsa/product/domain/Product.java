@@ -16,6 +16,7 @@ public class Product {
     private String productName;
     private Category category;
     private long price;
+    private long salesCount;
     private String description;
     private final LocalDateTime createdAt;
     private LocalDateTime updatedAt;
@@ -31,12 +32,25 @@ public class Product {
         this.updatedAt = updatedAt;
     }
 
+    public Product(UUID productId, String productName, Category category, long price, long salesCount,
+                   String description, LocalDateTime createdAt, LocalDateTime updatedAt) {
+        this.productId = productId;
+        this.productName = productName;
+        this.category = category;
+        this.price = price;
+        this.salesCount = salesCount;
+        this.description = description;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+    }
+
     public ProductResponseDTO toResponseDTO() {
         return new ProductResponseDTO(
             productId,
             productName,
             category,
             price,
+            salesCount,
             description,
             createdAt,
             updatedAt

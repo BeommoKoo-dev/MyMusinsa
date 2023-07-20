@@ -6,8 +6,6 @@ import org.prgrms.mymusinsa.product.dto.ProductCreateRequestDTO;
 import org.prgrms.mymusinsa.product.dto.ProductResponseDTO;
 import org.prgrms.mymusinsa.product.dto.ProductUpdateRequestDTO;
 import org.prgrms.mymusinsa.product.service.ProductService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -54,6 +52,12 @@ public class ProductRestController {
     public ResponseEntity deleteProductById(@PathVariable("productId") UUID productId) {
         productService.deleteProductById(productId);
         return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @GetMapping("/ranking/{topRanking}")
+    public ResponseEntity<List<ProductResponseDTO>> getProductByRanking(@PathVariable("topRanking") int topRanking) {
+        List<ProductResponseDTO> productsByRanking = productService.getProductByRanking(topRanking);
+        return ResponseEntity.ok(productsByRanking);
     }
 
 }
