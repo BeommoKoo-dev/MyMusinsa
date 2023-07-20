@@ -15,14 +15,4 @@ public record OrderResponseDTO(
     LocalDateTime createdAt,
     LocalDateTime updatedAt
 ) {
-    public static OrderResponseDTO of(Order order) {
-        return new OrderResponseDTO(order.getOrderId(),
-            order.getCustomerId(),
-            order.getAddress(),
-            order.getPostcode(),
-            order.getOrderStatus(),
-            order.getCreatedAt(),
-            order.getUpdatedAt()
-        );
-    }
 }
