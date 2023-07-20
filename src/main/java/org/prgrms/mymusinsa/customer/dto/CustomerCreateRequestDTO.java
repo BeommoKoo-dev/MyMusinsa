@@ -21,8 +21,8 @@ public record CustomerCreateRequestDTO(
             password,
             name,
             address,
-            Category.valueOf(interestedCategory
-            ));
+            Category.valueOf(interestedCategory)
+        );
     }
 
 }

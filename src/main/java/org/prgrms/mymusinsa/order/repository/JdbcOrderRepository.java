@@ -32,6 +32,7 @@ public class JdbcOrderRepository implements OrderRepository{
     private static final String FIND_ALL_SQL = "SELECT * FROM orders";
     private static final String FIND_ITEMS_BY_ID_SQL = "SELECT * FROM order_items WHERE order_id = :orderId";
     private static final String FIND_ORDER_BY_ID_SQL = "SELECT * FROM orders WHERE order_id = UUID_TO_BIN(:orderId)";
+
     private final NamedParameterJdbcTemplate jdbcTemplate;
 
     private final RowMapper<Order> orderRowMapper = (resultSet, rowNumber) -> {
