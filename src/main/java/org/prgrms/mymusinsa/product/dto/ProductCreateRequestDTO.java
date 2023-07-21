@@ -8,7 +8,7 @@ import java.util.UUID;
 
 public record ProductCreateRequestDTO(
     String productName,
-    String category,
+    Category category,
     long price,
     String description
 ) {
@@ -17,7 +17,7 @@ public record ProductCreateRequestDTO(
         return new Product(
             UUID.randomUUID(),
             productName,
-            Category.valueOf(category),
+            category,
             price,
             description,
             LocalDateTime.now(),

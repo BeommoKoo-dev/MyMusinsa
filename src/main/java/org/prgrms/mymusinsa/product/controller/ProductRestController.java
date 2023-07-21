@@ -1,6 +1,6 @@
 package org.prgrms.mymusinsa.product.controller;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.prgrms.mymusinsa.product.domain.Category;
 import org.prgrms.mymusinsa.product.dto.ProductCreateRequestDTO;
 import org.prgrms.mymusinsa.product.dto.ProductResponseDTO;
@@ -14,13 +14,13 @@ import java.util.List;
 import java.util.UUID;
 
 @RequestMapping("api/v1/products")
-@AllArgsConstructor
+@RequiredArgsConstructor
 @RestController
 public class ProductRestController {
 
     private final ProductService productService;
 
-    @GetMapping("")
+    @GetMapping
     public ResponseEntity<List<ProductResponseDTO>> getAllProduct() {
         List<ProductResponseDTO> allProducts = productService.getAllProduct();
         return ResponseEntity.ok(allProducts);

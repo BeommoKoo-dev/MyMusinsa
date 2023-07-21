@@ -1,9 +1,12 @@
 package org.prgrms.mymusinsa.order.repository;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.prgrms.mymusinsa.order.domain.Order;
 import org.prgrms.mymusinsa.order.domain.OrderItem;
 import org.prgrms.mymusinsa.order.domain.OrderStatus;
+import org.springframework.dao.DataAccessException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -11,10 +14,9 @@ import org.springframework.stereotype.Repository;
 
 import java.nio.ByteBuffer;
 import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
+@Slf4j
 @AllArgsConstructor
 @Repository
 public class JdbcOrderRepository implements OrderRepository{
@@ -24,14 +26,15 @@ public class JdbcOrderRepository implements OrderRepository{
         "VALUES(UUID_TO_BIN(:orderId), UUID_TO_BIN(:customerId), :address, :postcode, :orderStatus, :createdAt, :updatedAt)";
     private static final String INSERT_ORDER_ITEMS_SQL = "INSERT INTO order_items(order_id, product_id, quantity)" +
         "VALUES(UUID_TO_BIN(:orderId), UUID_TO_BIN(:productId), :quantity)";
-    private static final String INCREMENT_SALES_COUNT_SQL = "UPDATE products SET sales_count = sales_count + (:quantity) WHERE product_id = UUID_TO_BIN(:productId)";
+    private static final String INCREMENT_SALES_COUNT_SQL = "UPDATE products SET sales_count = sales_count + (:quantity) " +
+        "WHERE product_id = UUID_TO_BIN(:productId)";
     private static final String UPDATE_ORDER_SQL = "UPDATE orders " +
         "SET address = :address, postcode = :postcode, order_status = :orderStatus, updated_at = :updatedAt " +
         "WHERE order_id = UUID_TO_BIN(:orderId)";
     private static final String DELETE_ORDER_BY_ID_SQL = "DELETE FROM orders WHERE order_id = UUID_TO_BIN(:orderId)";
     private static final String DELETE_ORDER_ITEMS_BY_ID_SQL = "DELETE FROM order_items WHERE order_id = UUID_TO_BIN(:orderId)";
-    private static final String FIND_ALL_SQL = "SELECT * FROM orders";
-    private static final String FIND_ITEMS_BY_ID_SQL = "SELECT * FROM order_items WHERE order_id = :orderId";
+    private static final String FIND_ALL_SQL = "SELECT * FROM orders INNER JOIN order_items ON orders.order_id = order_items.order_id";
+    private static final String FIND_ITEMS_BY_ID_SQL = "SELECT * FROM order_items WHERE order_id = UUID_TO_BIN(:orderId)";
     private static final String FIND_ORDER_BY_ID_SQL = "SELECT * FROM orders WHERE order_id = UUID_TO_BIN(:orderId)";
 
     private final NamedParameterJdbcTemplate jdbcTemplate;
@@ -67,12 +70,12 @@ public class JdbcOrderRepository implements OrderRepository{
     }
 
     @Override
-    public int updateById(UUID orderId, Order order) {
+    public void update(Order order) {
+        UUID orderId = order.getOrderId();
         jdbcTemplate.update(DELETE_ORDER_ITEMS_BY_ID_SQL, Collections.singletonMap("orderId", orderId.toString()));
-        int update = jdbcTemplate.update(UPDATE_ORDER_SQL, toMapSqlParams(orderId, order));
+        jdbcTemplate.update(UPDATE_ORDER_SQL, toMapSqlParams(orderId, order));
         order.getOrderItems().forEach(orderItem ->
             jdbcTemplate.update(INSERT_ORDER_ITEMS_SQL, toMapSqlParmas(orderId, orderItem)));
-        return update;
     }
 
     @Override
@@ -86,7 +89,7 @@ public class JdbcOrderRepository implements OrderRepository{
         List<Order> allOrders= jdbcTemplate.query(FIND_ALL_SQL, orderRowMapper);
         allOrders.forEach(order -> {
             List<OrderItem> orderItems = jdbcTemplate.query(FIND_ITEMS_BY_ID_SQL,
-                Collections.singletonMap("orderId", order.getOrderId()),
+                Collections.singletonMap("orderId", order.getOrderId().toString()),
                 orderItemRowMapper);
             order.setOrderItems(orderItems);
         });
@@ -94,10 +97,20 @@ public class JdbcOrderRepository implements OrderRepository{
     }
 
     @Override
-    public Order findOrderById(UUID orderId) {
-        return jdbcTemplate.queryForObject(FIND_ORDER_BY_ID_SQL,
-            Collections.singletonMap("orderId", orderId.toString()),
-            orderRowMapper);
+    public Optional<Order> findOrderById(UUID orderId) {
+        try {
+            Order order = jdbcTemplate.queryForObject(FIND_ORDER_BY_ID_SQL,
+                Collections.singletonMap("orderId", orderId.toString()),
+                orderRowMapper);
+            List<OrderItem> orderItems = jdbcTemplate.query(FIND_ITEMS_BY_ID_SQL,
+                Collections.singletonMap("orderId", orderId.toString()),
+                orderItemRowMapper);
+            order.setOrderItems(orderItems);
+            return Optional.of(order);
+        } catch (EmptyResultDataAccessException e) {
+            log.warn(e.toString());
+            return Optional.empty();
+        }
     }
 
     private MapSqlParameterSource toMapSqlParams(Order order) {

@@ -15,5 +15,4 @@ public record ProductResponseDTO(
     LocalDateTime createdAt,
     LocalDateTime updatedAt
 ) {
-
 }

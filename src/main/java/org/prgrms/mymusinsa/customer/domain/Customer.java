@@ -1,5 +1,6 @@
 package org.prgrms.mymusinsa.customer.domain;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import org.prgrms.mymusinsa.customer.dto.CustomerResponseDTO;
@@ -9,6 +10,7 @@ import java.util.UUID;
 
 @Getter
 @Setter
+@AllArgsConstructor
 public class Customer {
 
     private final UUID customerId;
@@ -16,6 +18,7 @@ public class Customer {
     private String password;
     private String name;
     private String address;
+    private String postcode;
     private Category interestedCategory;
 
     public Customer(Email email, String password) {
@@ -24,20 +27,12 @@ public class Customer {
         this.password = password;
     }
 
-    public Customer(UUID customerId, Email email, String password, String name, String address, Category interestedCategory) {
-        this.customerId = customerId;
-        this.email = email;
-        this.password = password;
-        this.name = name;
-        this.address = address;
-        this.interestedCategory = interestedCategory;
-    }
-
     public CustomerResponseDTO toCustomerResponseDTO() {
         return new CustomerResponseDTO(
             email,
             name,
             address,
+            postcode,
             interestedCategory
         );
     }

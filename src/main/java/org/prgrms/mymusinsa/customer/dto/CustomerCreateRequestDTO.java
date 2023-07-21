@@ -12,7 +12,8 @@ public record CustomerCreateRequestDTO(
     String password,
     String name,
     String address,
-    String interestedCategory) {
+    String postcode,
+    Category interestedCategory) {
 
     public Customer toCustomer() {
         return new Customer(
@@ -21,7 +22,8 @@ public record CustomerCreateRequestDTO(
             password,
             name,
             address,
-            Category.valueOf(interestedCategory)
+            postcode,
+            interestedCategory
         );
     }
 

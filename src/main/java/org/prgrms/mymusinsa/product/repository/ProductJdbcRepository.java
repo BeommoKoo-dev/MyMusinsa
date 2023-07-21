@@ -1,8 +1,9 @@
 package org.prgrms.mymusinsa.product.repository;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.prgrms.mymusinsa.product.domain.Category;
 import org.prgrms.mymusinsa.product.domain.Product;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -12,7 +13,7 @@ import java.nio.ByteBuffer;
 import java.time.LocalDateTime;
 import java.util.*;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Repository
 public class ProductJdbcRepository implements ProductRepository{
 
@@ -48,10 +49,9 @@ public class ProductJdbcRepository implements ProductRepository{
         return product;
     }
 
-    public int updateById(UUID productId, Product product) {
-        int update = jdbcTemplate.update(UPDATE_PRODUCT_SQL,
+    public void updateById(UUID productId, Product product) {
+        jdbcTemplate.update(UPDATE_PRODUCT_SQL,
             toMapSqlParams(productId, product));
-        return update;
     }
 
     public void deleteById(UUID productId) {
@@ -62,10 +62,14 @@ public class ProductJdbcRepository implements ProductRepository{
         return jdbcTemplate.query(SELECT_ALL_SQL, productRowMapper);
     }
 
-    public Product findProductById(UUID productId) {
-        return jdbcTemplate.queryForObject(FIND_BY_ID_SQL,
-            Collections.singletonMap("productId", productId.toString()),
-            productRowMapper);
+    public Optional<Product> findProductById(UUID productId) {
+        try {
+            return Optional.of(jdbcTemplate.queryForObject(FIND_BY_ID_SQL,
+                Collections.singletonMap("productId", productId.toString()),
+                productRowMapper));
+        } catch (EmptyResultDataAccessException e) {
+            return Optional.empty();
+        }
     }
 
     public List<Product> findProductByCategory(Category category) {

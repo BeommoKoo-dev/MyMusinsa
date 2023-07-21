@@ -56,4 +56,13 @@ public class Product {
             updatedAt
         );
     }
+
+    public void update(ProductUpdateRequestDTO productUpdateRequestDTO) {
+        this.productName = productUpdateRequestDTO.productName();
+        this.category = productUpdateRequestDTO.category();
+        this.price = productUpdateRequestDTO.price();
+        this.description = productUpdateRequestDTO.description();
+        this.updatedAt = LocalDateTime.now();
+    }
+
 }

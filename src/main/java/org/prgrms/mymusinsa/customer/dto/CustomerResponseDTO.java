@@ -7,6 +7,7 @@ public record CustomerResponseDTO(
     Email email,
     String name,
     String address,
+    String postcode,
     Category interestedCategory
 ) {
 }

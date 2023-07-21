@@ -1,6 +1,6 @@
 package org.prgrms.mymusinsa.order.controller;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.prgrms.mymusinsa.order.dto.OrderCreateRequestDTO;
 import org.prgrms.mymusinsa.order.dto.OrderResponseDTO;
 import org.prgrms.mymusinsa.order.dto.OrderUpdateRequestDTO;
@@ -10,16 +10,17 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @RequestMapping("api/v1/orders")
 @RestController
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class OrderRestController {
 
     private final OrderService orderService;
 
-    @GetMapping("")
+    @GetMapping
     public ResponseEntity<List<OrderResponseDTO>> getAllOrders() {
         List<OrderResponseDTO> allOrders = orderService.getAllOrders();
         return ResponseEntity.ok(allOrders);
@@ -36,8 +37,8 @@ public class OrderRestController {
     }
 
     @PutMapping("/{orderId}")
-    public ResponseEntity updateOrder(@PathVariable("orderId") UUID orderId, @RequestBody OrderUpdateRequestDTO orderUpdateRequestDTO) {
-        orderService.updateOrder(orderId, orderUpdateRequestDTO);
+    public ResponseEntity updateOrderById(@PathVariable("orderId")UUID orderId, @RequestBody OrderUpdateRequestDTO orderUpdateRequestDTO) {
+        orderService.updateOrderById(orderId, orderUpdateRequestDTO);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 

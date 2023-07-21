@@ -1,15 +1,16 @@
 package org.prgrms.mymusinsa.order.domain;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.prgrms.mymusinsa.customer.domain.Email;
-import org.prgrms.mymusinsa.order.dto.OrderCreateRequestDTO;
 import org.prgrms.mymusinsa.order.dto.OrderResponseDTO;
+import org.prgrms.mymusinsa.order.dto.OrderUpdateRequestDTO;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
 @Getter
+@AllArgsConstructor
 public class Order {
 
     private final UUID orderId;
@@ -21,18 +22,6 @@ public class Order {
     private final LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    public Order(UUID orderId, UUID customerId, List<OrderItem> orderItems, OrderStatus orderStatus,
-                 String address, String postcode, LocalDateTime createdAt, LocalDateTime updatedAt) {
-        this.orderId = orderId;
-        this.customerId = customerId;
-        this.orderItems = orderItems;
-        this.orderStatus = orderStatus;
-        this.address = address;
-        this.postcode = postcode;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-    }
-
     public void setOrderItems(List<OrderItem> orderItems) {
         this.orderItems = orderItems;
     }
@@ -43,10 +32,19 @@ public class Order {
             customerId,
             address,
             postcode,
+            orderItems,
             orderStatus,
             createdAt,
             updatedAt
         );
+    }
+
+    public void update(OrderUpdateRequestDTO orderUpdateRequestDTO) {
+        this.orderItems = orderUpdateRequestDTO.orderItems();
+        this.address = orderUpdateRequestDTO.address();
+        this.postcode = orderUpdateRequestDTO.postcode();
+        this.orderStatus = orderUpdateRequestDTO.orderStatus();
+        this.updatedAt = LocalDateTime.now();
     }
 
 }

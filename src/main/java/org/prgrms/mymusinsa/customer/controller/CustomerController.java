@@ -1,17 +1,16 @@
 package org.prgrms.mymusinsa.customer.controller;
 
 import jakarta.validation.Valid;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.prgrms.mymusinsa.customer.dto.CustomerCreateRequestDTO;
-import org.prgrms.mymusinsa.customer.dto.CustomerLoginDTO;
+import org.prgrms.mymusinsa.customer.dto.CustomerLoginRequestDTO;
 import org.prgrms.mymusinsa.customer.service.CustomerService;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 @RequestMapping("customers")
 @Controller
 public class CustomerController {
@@ -29,7 +28,7 @@ public class CustomerController {
     }
 
     @PostMapping("/login")
-    public String login(@Valid CustomerLoginDTO customerLoginDTO) {
+    public String login(@Valid CustomerLoginRequestDTO customerLoginDTO) {
         customerService.login(customerLoginDTO);
         return "redirect:/products";
     }

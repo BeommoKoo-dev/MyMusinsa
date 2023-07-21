@@ -1,9 +1,10 @@
 package org.prgrms.mymusinsa.order.dto;
 
-import org.prgrms.mymusinsa.order.domain.Order;
+import org.prgrms.mymusinsa.order.domain.OrderItem;
 import org.prgrms.mymusinsa.order.domain.OrderStatus;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 public record OrderResponseDTO(
@@ -11,6 +12,7 @@ public record OrderResponseDTO(
     UUID customerId,
     String address,
     String postcode,
+    List<OrderItem> orderItems,
     OrderStatus orderStatus,
     LocalDateTime createdAt,
     LocalDateTime updatedAt

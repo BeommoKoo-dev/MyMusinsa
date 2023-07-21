@@ -1,6 +1,6 @@
 package org.prgrms.mymusinsa.product.controller;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.prgrms.mymusinsa.product.dto.ProductCreateRequestDTO;
 import org.prgrms.mymusinsa.product.dto.ProductResponseDTO;
 import org.prgrms.mymusinsa.product.service.ProductService;
@@ -14,12 +14,12 @@ import java.util.List;
 
 @RequestMapping("products")
 @Controller
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class ProductViewController {
 
     private final ProductService productService;
 
-    @GetMapping("")
+    @GetMapping
     public String getAllProducts(Model model) {
         List<ProductResponseDTO> allProducts = productService.getAllProduct();
         model.addAttribute("allProducts", allProducts);

@@ -1,6 +1,8 @@
 package org.prgrms.mymusinsa.order.service;
 
 import lombok.AllArgsConstructor;
+import org.prgrms.mymusinsa.global.exception.ErrorCode;
+import org.prgrms.mymusinsa.global.exception.GlobalCustomException;
 import org.prgrms.mymusinsa.order.domain.Order;
 import org.prgrms.mymusinsa.order.dto.OrderCreateRequestDTO;
 import org.prgrms.mymusinsa.order.dto.OrderResponseDTO;
@@ -33,13 +35,17 @@ public class OrderService {
     }
 
     public OrderResponseDTO getOrderById(UUID orderId) {
-        return orderRepository.findOrderById(orderId).toResponseDTO();
+        Order order = orderRepository.findOrderById(orderId).orElseThrow(() ->
+            new GlobalCustomException(ErrorCode.DB_DATA_NOTFOUND_ERROR));
+        return order.toResponseDTO();
     }
 
     @Transactional
-    public int updateOrder(UUID orderId, OrderUpdateRequestDTO orderUpdateRequestDTO) {
-        Order order = orderUpdateRequestDTO.toOrder();
-        return orderRepository.updateById(orderId, order);
+    public void updateOrderById(UUID orderId, OrderUpdateRequestDTO orderUpdateRequestDTO) {
+        Order order = orderRepository.findOrderById(orderId).orElseThrow(() ->
+            new GlobalCustomException(ErrorCode.DB_DATA_NOTFOUND_ERROR));
+        order.update(orderUpdateRequestDTO);
+        orderRepository.update(order);
     }
 
     @Transactional

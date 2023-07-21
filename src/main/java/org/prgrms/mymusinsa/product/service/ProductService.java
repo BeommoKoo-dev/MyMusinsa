@@ -1,6 +1,8 @@
 package org.prgrms.mymusinsa.product.service;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import org.prgrms.mymusinsa.global.exception.ErrorCode;
+import org.prgrms.mymusinsa.global.exception.GlobalCustomException;
 import org.prgrms.mymusinsa.product.domain.Category;
 import org.prgrms.mymusinsa.product.domain.Product;
 import org.prgrms.mymusinsa.product.dto.ProductCreateRequestDTO;
@@ -11,16 +13,19 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class ProductService {
 
     private final ProductRepository productRepository;
 
     public ProductResponseDTO getProductById(UUID productId) {
-        return productRepository.findProductById(productId).toResponseDTO();
+        Product product = productRepository.findProductById(productId).orElseThrow(() ->
+            new GlobalCustomException(ErrorCode.DB_DATA_NOTFOUND_ERROR));
+        return product.toResponseDTO();
     }
 
     public List<ProductResponseDTO> getAllProduct() {
@@ -38,9 +43,11 @@ public class ProductService {
     }
 
     @Transactional
-    public int updateProduct(UUID productId, ProductUpdateRequestDTO productUpdateRequestDTO) {
-        Product product = productUpdateRequestDTO.toProduct();
-        return productRepository.updateById(productId, product);
+    public void updateProduct(UUID productId, ProductUpdateRequestDTO productUpdateRequestDTO) {
+        Product product = productRepository.findProductById(productId).orElseThrow(() ->
+            new GlobalCustomException(ErrorCode.DB_DATA_NOTFOUND_ERROR));
+        product.update(productUpdateRequestDTO);
+        productRepository.updateById(productId, product);
     }
 
     @Transactional
