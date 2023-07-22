@@ -9,11 +9,9 @@ import java.util.UUID;
 
 public interface ProductRepository {
 
-    Product insert(Product product);
-
-    void updateById(UUID productId, Product product);
-
     void deleteById(UUID productId);
+
+    void decrementSalesCount(UUID productId, long salesCount);
 
     List<Product> findAll();
 
@@ -22,5 +20,11 @@ public interface ProductRepository {
     List<Product> findProductByCategory(Category category);
 
     List<Product> findProductByRanking(int topRanking);
+
+    void incrementSalesCount(UUID productId, long salesCount);
+
+    Product insert(Product product);
+
+    void updateById(UUID productId, Product product);
 
 }

@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.prgrms.mymusinsa.order.domain.Order;
 import org.prgrms.mymusinsa.order.domain.OrderItem;
 import org.prgrms.mymusinsa.order.domain.OrderStatus;
-import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -26,14 +25,12 @@ public class JdbcOrderRepository implements OrderRepository{
         "VALUES(UUID_TO_BIN(:orderId), UUID_TO_BIN(:customerId), :address, :postcode, :orderStatus, :createdAt, :updatedAt)";
     private static final String INSERT_ORDER_ITEMS_SQL = "INSERT INTO order_items(order_id, product_id, quantity)" +
         "VALUES(UUID_TO_BIN(:orderId), UUID_TO_BIN(:productId), :quantity)";
-    private static final String INCREMENT_SALES_COUNT_SQL = "UPDATE products SET sales_count = sales_count + (:quantity) " +
-        "WHERE product_id = UUID_TO_BIN(:productId)";
     private static final String UPDATE_ORDER_SQL = "UPDATE orders " +
         "SET address = :address, postcode = :postcode, order_status = :orderStatus, updated_at = :updatedAt " +
         "WHERE order_id = UUID_TO_BIN(:orderId)";
     private static final String DELETE_ORDER_BY_ID_SQL = "DELETE FROM orders WHERE order_id = UUID_TO_BIN(:orderId)";
     private static final String DELETE_ORDER_ITEMS_BY_ID_SQL = "DELETE FROM order_items WHERE order_id = UUID_TO_BIN(:orderId)";
-    private static final String FIND_ALL_SQL = "SELECT * FROM orders INNER JOIN order_items ON orders.order_id = order_items.order_id";
+    private static final String FIND_ALL_SQL = "SELECT * FROM orders";
     private static final String FIND_ITEMS_BY_ID_SQL = "SELECT * FROM order_items WHERE order_id = UUID_TO_BIN(:orderId)";
     private static final String FIND_ORDER_BY_ID_SQL = "SELECT * FROM orders WHERE order_id = UUID_TO_BIN(:orderId)";
 
@@ -63,7 +60,6 @@ public class JdbcOrderRepository implements OrderRepository{
         jdbcTemplate.update(INSERT_ORDER_SQL, toMapSqlParams(order));
         order.getOrderItems().forEach(orderItem -> {
                 jdbcTemplate.update(INSERT_ORDER_ITEMS_SQL, toMapSqlParmas(order.getOrderId(), orderItem));
-                jdbcTemplate.update(INCREMENT_SALES_COUNT_SQL, toMapSqlParmas(order.getOrderId(), orderItem));
             }
         );
         return order;

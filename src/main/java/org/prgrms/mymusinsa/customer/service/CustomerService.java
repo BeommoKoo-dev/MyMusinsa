@@ -3,6 +3,7 @@ package org.prgrms.mymusinsa.customer.service;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.prgrms.mymusinsa.customer.domain.Customer;
+import org.prgrms.mymusinsa.customer.domain.Email;
 import org.prgrms.mymusinsa.customer.dto.CustomerCreateRequestDTO;
 import org.prgrms.mymusinsa.customer.dto.CustomerLoginRequestDTO;
 import org.prgrms.mymusinsa.customer.dto.CustomerResponseDTO;
@@ -26,7 +27,11 @@ public class CustomerService {
     }
 
     public void login(CustomerLoginRequestDTO customerLoginRequestDTO) {
-        Optional<Customer> customer = customerJdbcRepository.checkExistenceByEmailAndPassWord(customerLoginRequestDTO.toCustomer());
+        Email email = new Email(customerLoginRequestDTO.email());
+        Optional<Customer> customer = customerJdbcRepository.checkExistenceByEmailAndPassWord(
+            email,
+            customerLoginRequestDTO.password()
+        );
         if(customer.isEmpty()) {
             throw new GlobalCustomException(ErrorCode.LOGIN_ERROR);
         }

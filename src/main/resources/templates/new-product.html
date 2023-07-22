@@ -1,0 +1,41 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+    <title>MyMusinsa-New-Product</title>
+</head>
+<body class="container-fluid">
+<h1>MyMusinsa</h1>
+<img th:src="@{/resources/bg.png}" class="img-fluid">
+<h2>New Product</h2>
+<form th:action="@{/products/new}" method="post">
+    <div class="mb-3">
+        <label for="ProductName" class="form-label">ProductName</label>
+        <input type="text" name="productName" class="form-control" id="ProductName" required>
+    </div>
+    <div class="mb-3">
+        <label for="Category" class="form-label">Category</label>
+        <select id="category" name="category" class="form-select">
+            <option selected>Open this select menu</option>
+            <option value="CLOTH">CLOTH</option>
+            <option value="ACCESSARY">ACCESSARY</option>
+            <option value="SHOES">SHOES</option>
+            <option value="OUTER">OUTER</option>
+        </select>
+    </div>
+    <div class="mb-3">
+        <label for="Price" class="form-label">Price</label>
+        <input type="number" name="price" class="form-control" id="Price" required>
+    </div>
+    <div class="mb-3">
+        <label for="Description" class="form-label">Description</label>
+        <input type="text" name="description" class="form-control" id="Description" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+</body>

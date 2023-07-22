@@ -11,8 +11,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.nio.ByteBuffer;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Repository
 @RequiredArgsConstructor
@@ -43,10 +42,14 @@ public class CustomerJdbcRepository {
         return customer;
     }
 
-    public Optional<Customer> checkExistenceByEmailAndPassWord(Customer customer) {
+    public Optional<Customer> checkExistenceByEmailAndPassWord(Email email, String password) {
         try {
+            Map<String, Object> params = new HashMap<>();
+            params.put("email", email.getEmailAddress());
+            params.put("password", password);
+
             return Optional.of(jdbcTemplate.queryForObject(CHECK_BY_EMAIL_AND_PASSWORD_SQL,
-                toLoginMapSqlParams(customer),
+                params,
                 customerRowMapper));
         } catch (EmptyResultDataAccessException e) {
             return Optional.empty();
@@ -61,11 +64,6 @@ public class CustomerJdbcRepository {
             .addValue("address", customer.getAddress())
             .addValue("postcode", customer.getPostcode())
             .addValue("interestedCategory", customer.getInterestedCategory().toString());
-    }
-
-    private MapSqlParameterSource toLoginMapSqlParams(Customer customer) {
-        return new MapSqlParameterSource().addValue("email", customer.getEmail().getEmailAddress())
-            .addValue("password", customer.getPassword());
     }
 
     private UUID toUUID(byte[] bytes) {

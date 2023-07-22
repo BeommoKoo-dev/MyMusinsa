@@ -1,0 +1,65 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+    <title>MyMusinsa-Products</title>
+</head>
+<body class="container-fluid">
+<h1>MyMusinsa</h1>
+<img th:src="@{/bg.png}" class="img-fluid"
+     alt="image NOT FOUND">
+<div class="d-grid gap-2 d-md-flex justify-content-md-end">
+    <a th:href="@{/products/new}" class="btn btn-primary me-md-2" type="button">Create Product</a>
+</div>
+
+<script th:inline="javascript">
+    function hello() {
+        alert("hello");
+    }
+    function addToOrderItem(productId, quantity) {
+        // const orderItem = {
+        //     productId: productId
+        // };
+        alert(productId);
+        alert(quantity);
+    }
+</script>
+
+<form th:action="@{api/v1/orders/new}" method="POST">
+    <table class="table table-striped table-hover">
+        <thead>
+        <tr>
+            <th scope="col">Image</th>
+            <th scope="col">ID</th>
+            <th scope="col">Name</th>
+            <th scope="col">Category</th>
+            <th scope="col">Price</th>
+            <th scope="col">Quantity</th>
+            <th scope="col">AddButton</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="Product, ProductStat: ${allProducts}" th:object="${Product}">
+            <td><img th:src="@{*{productName} + .png}" style="max-width: 20%; height: auto"></td>
+            <td th:text="*{productId}"></td>
+            <td th:text="*{productName}"></td>
+            <td th:text="*{category}"></td>
+            <td th:text="*{price}"></td>
+            <td>
+                <input type="number" th:id="*{productId}">
+            </td>
+            <td>
+                <button th:onclick="addToOrderItem([[${Product.productId}]], [[${Product.productId}]].value)">Add</button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <button type="submit" class="btn btn-primary">Order It!</button>
+</form>
+</body>
+</html>

@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -43,7 +42,7 @@ public class ProductService {
     }
 
     @Transactional
-    public void updateProduct(UUID productId, ProductUpdateRequestDTO productUpdateRequestDTO) {
+    public void updateProductById(UUID productId, ProductUpdateRequestDTO productUpdateRequestDTO) {
         Product product = productRepository.findProductById(productId).orElseThrow(() ->
             new GlobalCustomException(ErrorCode.DB_DATA_NOTFOUND_ERROR));
         product.update(productUpdateRequestDTO);
