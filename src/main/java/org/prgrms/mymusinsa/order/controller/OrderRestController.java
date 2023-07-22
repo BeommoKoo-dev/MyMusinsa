@@ -1,14 +1,10 @@
 package org.prgrms.mymusinsa.order.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.prgrms.mymusinsa.order.domain.Order;
-import org.prgrms.mymusinsa.order.domain.OrderItem;
 import org.prgrms.mymusinsa.order.dto.OrderCreateRequestDTO;
 import org.prgrms.mymusinsa.order.dto.OrderResponseDTO;
 import org.prgrms.mymusinsa.order.dto.OrderUpdateRequestDTO;
 import org.prgrms.mymusinsa.order.service.OrderService;
-import org.prgrms.mymusinsa.product.service.ProductService;
-import org.prgrms.mymusinsa.product.util.UpdateOption;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

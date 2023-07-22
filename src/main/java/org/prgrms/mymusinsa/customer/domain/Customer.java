@@ -21,12 +21,6 @@ public class Customer {
     private String postcode;
     private Category interestedCategory;
 
-    public Customer(Email email, String password) {
-        this.customerId = UUID.randomUUID();
-        this.email = email;
-        this.password = password;
-    }
-
     public CustomerResponseDTO toCustomerResponseDTO() {
         return new CustomerResponseDTO(
             email,
