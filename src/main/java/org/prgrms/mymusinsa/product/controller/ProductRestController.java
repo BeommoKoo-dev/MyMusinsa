@@ -1,5 +1,6 @@
 package org.prgrms.mymusinsa.product.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.prgrms.mymusinsa.product.domain.Category;
 import org.prgrms.mymusinsa.product.dto.ProductCreateRequestDTO;
@@ -27,7 +28,7 @@ public class ProductRestController {
     }
 
     @PostMapping("/new")
-    public ResponseEntity<ProductResponseDTO> createProduct(@RequestBody ProductCreateRequestDTO productCreateRequestDTO) {
+    public ResponseEntity<ProductResponseDTO> createProduct(@Valid @RequestBody ProductCreateRequestDTO productCreateRequestDTO) {
         return ResponseEntity.ok(productService.createProduct(productCreateRequestDTO));
     }
 

@@ -19,5 +19,4 @@ public record OrderUpdateRequestDTO(
     @NotBlank(message = "입력이 누락되었습니다.")
     OrderStatus orderStatus
 ) {
-
 }

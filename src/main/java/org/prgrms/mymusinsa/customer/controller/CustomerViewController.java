@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequiredArgsConstructor
 @RequestMapping("customers")
 @Controller
-public class CustomerController {
+public class CustomerViewController {
 
     private final CustomerService customerService;
 

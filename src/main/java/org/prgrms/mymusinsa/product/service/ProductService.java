@@ -51,6 +51,8 @@ public class ProductService {
 
     @Transactional
     public void deleteProductById(UUID productId) {
+        productRepository.findProductById(productId).orElseThrow(() ->
+            new GlobalCustomException(ErrorCode.DB_DATA_NOTFOUND_ERROR));
         productRepository.deleteById(productId);
     }
 

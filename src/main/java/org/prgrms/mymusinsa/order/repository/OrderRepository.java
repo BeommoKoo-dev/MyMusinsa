@@ -1,10 +1,8 @@
 package org.prgrms.mymusinsa.order.repository;
 
 import org.prgrms.mymusinsa.order.domain.Order;
-import org.prgrms.mymusinsa.order.domain.OrderItem;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 

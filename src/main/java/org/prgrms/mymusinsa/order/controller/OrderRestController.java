@@ -1,5 +1,6 @@
 package org.prgrms.mymusinsa.order.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.prgrms.mymusinsa.order.dto.OrderCreateRequestDTO;
 import org.prgrms.mymusinsa.order.dto.OrderResponseDTO;
@@ -26,7 +27,7 @@ public class OrderRestController {
     }
 
     @PostMapping("/new")
-    public ResponseEntity<OrderResponseDTO> createOrder(@RequestBody OrderCreateRequestDTO orderCreateRequestDTO) {
+    public ResponseEntity<OrderResponseDTO> createOrder(@Valid @RequestBody OrderCreateRequestDTO orderCreateRequestDTO) {
         return ResponseEntity.ok(orderService.createOrder(orderCreateRequestDTO));
     }
 

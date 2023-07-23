@@ -58,9 +58,8 @@ public class JdbcOrderRepository implements OrderRepository{
     @Override
     public Order insert(Order order) {
         jdbcTemplate.update(INSERT_ORDER_SQL, toMapSqlParams(order));
-        order.getOrderItems().forEach(orderItem -> {
-                jdbcTemplate.update(INSERT_ORDER_ITEMS_SQL, toMapSqlParmas(order.getOrderId(), orderItem));
-            }
+        order.getOrderItems().forEach(orderItem ->
+                jdbcTemplate.update(INSERT_ORDER_ITEMS_SQL, toMapSqlParmas(order.getOrderId(), orderItem))
         );
         return order;
     }

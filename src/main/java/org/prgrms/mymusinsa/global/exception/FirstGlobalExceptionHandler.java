@@ -1,15 +1,16 @@
 package org.prgrms.mymusinsa.global.exception;
 
-import lombok.extern.slf4j.Slf4j;
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import jakarta.annotation.Priority;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-@Slf4j
+@Priority(1)
 @RestControllerAdvice
-public class GlobalExceptionHandler {
+public class FirstGlobalExceptionHandler {
 
     @ExceptionHandler(GlobalCustomException.class)
     public ResponseEntity<ErrorResponse> handleGlobalCustomException(final GlobalCustomException e) {
@@ -28,20 +29,28 @@ public class GlobalExceptionHandler {
                 e.getFieldError().getDefaultMessage()));
     }
 
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ErrorResponse> handleIllegalArgumentException(final IllegalArgumentException e) {
+        e.printStackTrace();
+        return ResponseEntity
+            .status(ErrorCode.ILLEGAL_ARGUMENT_ERROR.getStatus().value())
+            .body(new ErrorResponse(ErrorCode.ILLEGAL_ARGUMENT_ERROR));
+    }
+
+    @ExceptionHandler(InvalidFormatException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidFormatException(final InvalidFormatException e) {
+        e.printStackTrace();
+        return ResponseEntity
+            .status(ErrorCode.INVALID_FORMAT_ERROR.getStatus().value())
+            .body(new ErrorResponse(ErrorCode.INVALID_FORMAT_ERROR));
+    }
+
     @ExceptionHandler(DataAccessException.class)
     public ResponseEntity<ErrorResponse> handleDataAccessException(final DataAccessException e) {
         e.printStackTrace();
         return ResponseEntity
             .status(ErrorCode.DB_UNKNOWN_ERROR.getStatus().value())
             .body(new ErrorResponse(ErrorCode.DB_UNKNOWN_ERROR));
-    }
-
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorResponse> handleException(Exception e) {
-        e.printStackTrace();
-        return ResponseEntity
-            .status(ErrorCode.INTERNAL_SERVER_ERROR.getStatus().value())
-            .body(new ErrorResponse(ErrorCode.INTERNAL_SERVER_ERROR));
     }
 
 }

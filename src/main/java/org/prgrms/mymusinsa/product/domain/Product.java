@@ -1,14 +1,14 @@
 package org.prgrms.mymusinsa.product.domain;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.prgrms.mymusinsa.order.dto.OrderResponseDTO;
-import org.prgrms.mymusinsa.product.dto.ProductCreateRequestDTO;
 import org.prgrms.mymusinsa.product.dto.ProductResponseDTO;
 import org.prgrms.mymusinsa.product.dto.ProductUpdateRequestDTO;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+@AllArgsConstructor
 @Getter
 public class Product {
 
@@ -27,18 +27,6 @@ public class Product {
         this.productName = productName;
         this.category = category;
         this.price = price;
-        this.description = description;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-    }
-
-    public Product(UUID productId, String productName, Category category, long price, long salesCount,
-                   String description, LocalDateTime createdAt, LocalDateTime updatedAt) {
-        this.productId = productId;
-        this.productName = productName;
-        this.category = category;
-        this.price = price;
-        this.salesCount = salesCount;
         this.description = description;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;

@@ -1,6 +1,5 @@
 package org.prgrms.mymusinsa.order.dto;
 
-import jakarta.validation.constraints.NotBlank;
 import org.prgrms.mymusinsa.order.domain.OrderItem;
 import org.prgrms.mymusinsa.order.domain.OrderStatus;
 

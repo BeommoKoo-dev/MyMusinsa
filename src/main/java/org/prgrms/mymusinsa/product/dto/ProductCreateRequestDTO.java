@@ -1,6 +1,8 @@
 package org.prgrms.mymusinsa.product.dto;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import org.prgrms.mymusinsa.product.domain.Category;
 import org.prgrms.mymusinsa.product.domain.Product;
 
@@ -14,8 +16,8 @@ public record ProductCreateRequestDTO(
 
     Category category,
 
-    @NotBlank(message = "입력이 누락되었습니다.")
-    long price,
+    @NotNull(message = "입력이 누락되었습니다.")
+    Long price,
 
     @NotBlank(message = "입력이 누락되었습니다.")
     String description
